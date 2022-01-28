@@ -1,0 +1,79 @@
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Initialising {
+
+    //All the colors pegs THAT CAN BE USED AS PATTERN OR GUESS can have ie. pegs that give feedback, are red and white.
+    public String[] allPegColors = {"Black", "Orange", "Purple", "Blue", "Green", "Yellow"};
+    private Random r = new Random();
+    public Pegs whitePeg = new Pegs("White");
+    public Pegs redPeg = new Pegs("Red");
+
+    //Generates the initial pattern, for the player(in this case code) to be guessed.
+    public ArrayList<Pegs> decidePattern(){
+        ArrayList<Pegs> generatedPatternToBeGuessed = new ArrayList<>();
+        int upperboundColor = 6;
+
+        //For loop to generate 4 random coloured pegs, for the pattern to be guessed.
+        for (int i = 1; i <= 4; i++){
+
+            int nextPegColor = r.nextInt(upperboundColor);
+
+            Pegs newPeg = new Pegs(allPegColors[nextPegColor], i);
+            generatedPatternToBeGuessed.add(newPeg);
+        }
+        return generatedPatternToBeGuessed;
+    }
+
+    /* Compares the pegs in the guess with the set pattern of pegs, to be guessed.
+    Returns a list of either red or white pegs, depending on how many guesses were correct. */
+    public ArrayList<Pegs> compareAnswer(ArrayList<Pegs> guessPegList, ArrayList<Pegs> patternToGuess){
+
+        Main m = new Main();
+        GuessPattern g = new GuessPattern();
+
+        ArrayList<Pegs> pegResponse = new ArrayList();
+        ArrayList<Pegs> tempPattern = patternToGuess;
+
+        //for loop for the guess row
+        for(int i = 1; i <= 4; i++){
+            //for loop for the pattern row
+            for(int i2 = 1; i2 <= 4; i2++){
+
+                //Variables to make it easier to understand the following if statements.
+                String guessColor = guessPegList.get(i - 1).getColor();
+                String patternColor = tempPattern.get(i2 - 1).getColor();
+                Pegs guessPeg = guessPegList.get(i - 1);
+                Pegs patternPeg = tempPattern.get(i2 - 1);
+
+                //Checks if the peg has been checked before and skips the peg if it returned a white/red peg.
+                if(patternPeg.getColor() != "Used"){
+
+                    //Checks if the guess peg and pattern peg is the same color, in the same position.
+                    if(patternPeg.equals(guessPeg)) {
+
+                        pegResponse.add(redPeg);
+                        patternPeg.setColor("Used");
+                        break;
+
+                    } else
+                        /*Checks if the guess peg and pattern peg have the same color, and that the peg in the same column as the pattern peg,
+                        is not the same color, as it later in the for loop would return a red peg*/
+                        if(patternColor == guessColor && ! guessPegList.get(i2 - 1).equals(patternPeg)){
+
+                            pegResponse.add(whitePeg);
+                            patternPeg.setColor("Used");
+                            break;
+                    }
+                }
+            }
+        }
+
+        for(int i = 0; i < pegResponse.size(); i++){
+
+            System.out.println(pegResponse.get(i).getColor() + "");
+        }
+        return pegResponse;
+    }
+}

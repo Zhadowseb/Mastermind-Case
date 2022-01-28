@@ -1,0 +1,86 @@
+import java.util.ArrayList;
+
+public class GuessPattern {
+
+    private Initialising setup = new Initialising();
+    private Main main = new Main();
+
+    public static ArrayList<Pegs> guess = new ArrayList<>();
+    private ArrayList<Pegs> guessResponse = new ArrayList<>();
+
+    /* Tries to guess the set pattern, and returns true, if it was solved.
+
+    To do this efficiently, I would have to implement the minimax algorithm, which I have never worked with before,
+    and would have to study more, to implement it correctly.
+
+    The algorithm will predict the best possible next step. This would be done with recursion in the guessPattern method,
+    where the algorithm would continually be called, until the best next step is found.
+     */
+    public Boolean guessPattern(){
+
+        for(int i = 1; i <= 10; i++){
+            switch (i){
+                case 1:
+                    pickFourPegs(0);
+                    guessResponse = setup.compareAnswer(guess, main.patternToGuess);
+
+                    if(guessResponse.size() == 4 && allResponsePegsRed(guessResponse) == true){
+                        System.out.println("You win!");
+                        break;
+                    }
+                case 2:
+                    if(guessResponse.size() == 3){
+                        for(int i2 = 1; i2 <= 4; i2++){
+                            Pegs guess1 = new Pegs(setup.allPegColors[1], i2);
+                            guess.add(guess1);
+                        }
+                    }
+
+                    guessResponse = setup.compareAnswer(guess, main.patternToGuess);
+
+                    if(guessResponse.size() == 4){
+                        System.out.println("You win!");
+                        break;
+                    }
+                case 3:
+
+                case 4:
+
+                case 5:
+
+                case 6:
+
+                case 7:
+
+                case 8:
+
+                case 9:
+
+                case 10:
+
+
+            }
+        }
+        return false;
+    }
+
+    //Will makes the guess arraylist of pegs, one color, wherein it takes an int for the spot in the color list, with all the potential peg colors.
+    private void pickFourPegs(int colorInList){
+        for(int i2 = 1; i2 <= 4; i2++){
+            Pegs guess1 = new Pegs(setup.allPegColors[colorInList], i2);
+            guess.add(guess1);
+        }
+        guessResponse = setup.compareAnswer(guess, main.patternToGuess);
+    }
+
+    //Returns true if a guess returns four red pegs, thereby winning the game.
+    public Boolean allResponsePegsRed(ArrayList<Pegs> listOfResponsePegs){
+        for(int i = 0; i < listOfResponsePegs.size(); i++){
+            if(listOfResponsePegs.get(i).equals(setup.whitePeg)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+}

@@ -1,0 +1,47 @@
+public class Pegs {
+
+    private String color;
+    private int rowPosition;
+
+    //Constructor for creating a response peg ie. red or white, where position doesn't matter.
+    public Pegs(String color){
+
+        this.color = color;
+    }
+
+    //Constructor for creating a peg
+    public Pegs(String color, int rowPosition){
+        this.color = color;
+        this.rowPosition = rowPosition;
+    }
+
+    //Get peg color
+    public String getColor(){
+        return color;
+    }
+
+    //set peg color
+    public void setColor(String color){
+        this.color = color;
+    }
+
+    //get peg row spot
+    public int getRowPosition(){
+        return rowPosition;
+    }
+
+    /* Normal equals doesn't work, therefore this overrides equals function, so that it will now return true,
+    if two pegs have the same color and position in a row. */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Pegs peg = (Pegs) o;
+        return color == peg.color &&
+                rowPosition == peg.rowPosition;
+    }
+}

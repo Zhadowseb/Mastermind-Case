@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class GuessPattern {
 
-    private Initialising setup = new Initialising();
+    private Initialising in = new Initialising();
     private Main main = new Main();
 
     public static ArrayList<Pegs> guess = new ArrayList<>();
@@ -15,72 +15,35 @@ public class GuessPattern {
 
     The algorithm will predict the best possible next step. This would be done with recursion in the guessPattern method,
     where the algorithm would continually be called, until the best next step is found.
+
+    I'm also pretty sure this can be solved with minimax and just numbers instead of object oriented, but I was told
+    That was the main thing that was required for the position, which is why I decided to do it this way.
      */
     public Boolean guessPattern(){
 
-        for(int i = 1; i <= 10; i++){
-            switch (i){
-                case 1:
-                    pickFourPegs(0);
-                    guessResponse = setup.compareAnswer(guess, main.patternToGuess);
-
-                    if(guessResponse.size() == 4 && allResponsePegsRed(guessResponse) == true){
-                        System.out.println("You win!");
-                        break;
-                    }
-                case 2:
-                    if(guessResponse.size() == 3){
-                        for(int i2 = 1; i2 <= 4; i2++){
-                            Pegs guess1 = new Pegs(setup.allPegColors[1], i2);
-                            guess.add(guess1);
-                        }
-                    }
-
-                    guessResponse = setup.compareAnswer(guess, main.patternToGuess);
-
-                    if(guessResponse.size() == 4){
-                        System.out.println("You win!");
-                        break;
-                    }
-                case 3:
-
-                case 4:
-
-                case 5:
-
-                case 6:
-
-                case 7:
-
-                case 8:
-
-                case 9:
-
-                case 10:
+        for(int attempts = 1; 1 <= 10; attempts++){
+            /* Here minimax would be applied recursively to find the next best combination of four colors, to find the answer fastest.
+            if minimax is used correctly it could be done within five rows every time.
+            The guess would then be put into the "guess" array, so it can be used in the compareAnswer function*/
 
 
+            guessResponse = in.compareAnswer(guess, main.patternToGuess);
+
+            if(guessResponse.size() == 4 && allResponsePegsRed(guessResponse) == true){
+                System.out.println("You win!");
+                break;
             }
         }
         return false;
     }
 
-    //Will makes the guess arraylist of pegs, one color, wherein it takes an int for the spot in the color list, with all the potential peg colors.
-    private void pickFourPegs(int colorInList){
-        for(int i2 = 1; i2 <= 4; i2++){
-            Pegs guess1 = new Pegs(setup.allPegColors[colorInList], i2);
-            guess.add(guess1);
-        }
-        guessResponse = setup.compareAnswer(guess, main.patternToGuess);
-    }
-
     //Returns true if a guess returns four red pegs, thereby winning the game.
     public Boolean allResponsePegsRed(ArrayList<Pegs> listOfResponsePegs){
         for(int i = 0; i < listOfResponsePegs.size(); i++){
-            if(listOfResponsePegs.get(i).equals(setup.whitePeg)){
+            if(listOfResponsePegs.get(i).equals(in.whitePeg)){
                 return false;
             }
         }
         return true;
     }
-
 }

@@ -11,20 +11,6 @@ public class Main {
         GuessPattern g = new GuessPattern();
 
         patternToGuess = i.decidePattern();
-        System.out.println(patternToGuess.get(0).getColor() + " " + patternToGuess.get(0).getRowPosition());
-        System.out.println(patternToGuess.get(1).getColor() + " " + patternToGuess.get(1).getRowPosition());
-        System.out.println(patternToGuess.get(2).getColor() + " " + patternToGuess.get(2).getRowPosition());
-        System.out.println(patternToGuess.get(3).getColor() + " " + patternToGuess.get(3).getRowPosition());
-        System.out.println(" ");
-
         g.guessPattern();
-
-
-        System.out.println(" ");
-        System.out.println(g.guess.get(0).getColor() + " " + g.guess.get(0).getRowPosition());
-        System.out.println(g.guess.get(1).getColor() + " " + g.guess.get(1).getRowPosition());
-        System.out.println(g.guess.get(2).getColor() + " " + g.guess.get(2).getRowPosition());
-        System.out.println(g.guess.get(3).getColor() + " " + g.guess.get(3).getRowPosition());
-        System.out.println(" ");
     }
 }

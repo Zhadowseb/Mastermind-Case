@@ -7,43 +7,107 @@ public class GuessPattern {
 
     public static ArrayList<Pegs> guess = new ArrayList<>();
     private ArrayList<Pegs> guessResponse = new ArrayList<>();
-
-    /* Tries to guess the set pattern, and returns true, if it was solved.
-
-    To do this efficiently, I would have to implement the minimax algorithm, which I have never worked with before,
-    and would have to study more, to implement it correctly.
-
-    The algorithm will predict the best possible next step. This would be done with recursion in the guessPattern method,
-    where the algorithm would continually be called, until the best next step is found.
-
-    I'm also pretty sure this can be solved with minimax and just numbers instead of object oriented, but I was told
-    That was the main thing that was required for the position, which is why I decided to do it this way.
-     */
-    public Boolean guessPattern(){
-
-        for(int attempts = 1; 1 <= 10; attempts++){
-            /* Here minimax would be applied recursively to find the next best combination of four colors, to find the answer fastest.
-            if minimax is used correctly it could be done within five rows every time.
-            The guess would then be put into the "guess" array, so it can be used in the compareAnswer function*/
+    private ArrayList<String> totalGuesses = new ArrayList<>();
+    public ArrayList<Pegs> patternToGuess = new ArrayList<>();
 
 
-            guessResponse = in.compareAnswer(guess, main.patternToGuess);
+    public void addTotalGuesses(){
+        for(int spotOne = 0; spotOne <= 5; spotOne++){
+            for(int spotTwo = 0; spotTwo <= 5; spotTwo++){
+                for(int spotThree = 0; spotThree <= 5; spotThree++){
+                    for(int spotFour = 0; spotFour <= 5; spotFour++){
+                        String tempString = String.valueOf(spotOne) + String.valueOf(spotTwo) + String.valueOf(spotThree) + String.valueOf(spotFour);
+                        totalGuesses.add(tempString);
+                    }
+                }
+            }
+        }
+    }
 
-            if(guessResponse.size() == 4 && allResponsePegsRed(guessResponse) == true){
-                System.out.println("You win!");
-                break;
+    //Follows Donald Knuth's generic algorithm for solving within 5 attempts.
+    public void tryGuessing(){
+        for(int attempt = 1; attempt <= 5; attempt++){
+
+            if(attempt == 1){
+                guess = createGuess(totalGuesses.get(7));
+                guessResponse = in.compareAnswer(guess, patternToGuess);
+                if(allResponsePegsRed(guessResponse)){
+                    System.out.println("Code was broken! It was the following: " +
+                            guess.get(0).getColor() + " " +
+                            guess.get(1).getColor() + " " +
+                            guess.get(2).getColor() + " " +
+                            guess.get(3).getColor());
+                    break;
+                }else{
+                    totalGuesses = removeDifferentResponses(totalGuesses);
+                }
+            }
+        }
+    }
+
+    public ArrayList<Pegs> createGuess(String colorNumbers){
+        ArrayList<Pegs> tempGuessList = new ArrayList<>();
+        for(int i = 0; i <= 3; i++){
+            int colorInt = Integer.parseInt(colorNumbers.substring(i, i + 1));
+            Pegs guessPeg = new Pegs(in.allPegColors[colorInt], i + 1);
+            tempGuessList.add(guessPeg);
+        }
+        return tempGuessList;
+    }
+
+    //Returns true if a guess returns four red pegs, thereby winning the game.
+    public Boolean allResponsePegsRed(ArrayList<Pegs> listOfResponsePegs){
+        if(listOfResponsePegs.size() == 4){
+            for(int i = 0; i < listOfResponsePegs.size(); i++){
+                if(listOfResponsePegs.get(i).equals(in.whitePeg)){
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    //Returns true if a guess returns four red pegs, thereby winning the game.
-    public Boolean allResponsePegsRed(ArrayList<Pegs> listOfResponsePegs){
-        for(int i = 0; i < listOfResponsePegs.size(); i++){
-            if(listOfResponsePegs.get(i).equals(in.whitePeg)){
-                return false;
+    public ArrayList<String> removeDifferentResponses(ArrayList<String> currentTotalGuesses){
+        ArrayList<String> newTotalGuesses = new ArrayList<>();
+        ArrayList<Pegs> guessToTest = new ArrayList<>();
+        ArrayList<Pegs> testetGuessResponse = new ArrayList<>();
+
+        for(int i = 0; i < currentTotalGuesses.size(); i++){
+            String currentGuess = currentTotalGuesses.get(i);
+            guessToTest = createGuess(currentGuess);
+            testetGuessResponse = in.compareAnswer(guessToTest, guess);
+
+            if(testetGuessResponse.size() == guessResponse.size()){
+
+                int testReds = 0;
+                int testWhites = 0;
+                int responseReds = 0;
+                int responseWhites = 0;
+
+                for(int i2 = 0; i2 <= guessResponse.size(); i2++){
+                    if(guessResponse.size() != 0 && i2 == guessResponse.size()){
+                        break;
+                    }
+                    //Ved 0 response pegs, kan jeg ikke bruge den her metode.
+
+                    if(guessResponse.get(i2).getColor() == "Red"){
+                        responseReds++;
+                    } else if (guessResponse.get(i2).getColor() == "White"){
+                        responseWhites++;
+                    }
+
+                    if(testetGuessResponse.get(i2).getColor() == "Red"){
+                        testReds++;
+                    } else if(testetGuessResponse.get(i2).getColor() == "White"){
+                        testWhites++;
+                    }
+
+                    if(testReds == responseReds && testWhites == responseWhites){
+                        newTotalGuesses.add(currentGuess);
+                    }
+                }
             }
         }
-        return true;
+        return newTotalGuesses;
     }
 }

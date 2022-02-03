@@ -30,11 +30,12 @@ public class Initialising {
     Returns a list of either red or white pegs, depending on how many guesses were correct. */
     public ArrayList<Pegs> compareAnswer(ArrayList<Pegs> guessPegList, ArrayList<Pegs> patternToGuess){
 
-        Main m = new Main();
-        GuessPattern g = new GuessPattern();
-
         ArrayList<Pegs> pegResponse = new ArrayList();
-        ArrayList<Pegs> tempPattern = patternToGuess;
+        ArrayList<Pegs> tempPattern = new ArrayList<>();
+        for(int i = 0; i < 4; i++){
+            Pegs patternPegCopy = new Pegs(patternToGuess.get(i).getColor(), i + 1);
+            tempPattern.add(patternPegCopy);
+        }
 
         //for loop for the guess row
         for(int i = 1; i <= 4; i++){
@@ -68,11 +69,6 @@ public class Initialising {
                     }
                 }
             }
-        }
-
-        for(int i = 0; i < pegResponse.size(); i++){
-
-            System.out.println(pegResponse.get(i).getColor() + "");
         }
         return pegResponse;
     }

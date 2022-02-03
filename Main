@@ -1,16 +1,16 @@
-import java.util.ArrayList;
-
 public class Main {
 
-    public static ArrayList<Pegs> patternToGuess = new ArrayList<>();
-
     public static void main(String[] args){
+
 
 
         Initialising i = new Initialising();
         GuessPattern g = new GuessPattern();
 
-        patternToGuess = i.decidePattern();
-        g.guessPattern();
+        g.addTotalGuesses();
+
+        g.patternToGuess = i.decidePattern();
+
+        g.tryGuessing();
     }
 }
